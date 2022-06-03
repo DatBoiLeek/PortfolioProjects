@@ -45,7 +45,6 @@ total_tests_per_thousand DECIMAL (5,3),
 new_tests_per_thousand DECIMAL (5,3),
 new_tests_smoothed INT,
 new_tests_smoothed_per_thousand DECIMAL (5,3),
--- positive_rate DECIMAL (4,5), wasn't working, digit before decimal is too low, < 0. 
 tests_per_case DECIMAL (5,3),
 tests_units VARCHAR (100),
 total_vaccinations INT,
@@ -60,7 +59,6 @@ people_fully_vaccinated_per_hundred DECIMAL (5,3),
 total_boosters_per_hundred DECIMAL (5,3),
 new_vaccinations_smoothed_per_million INT,
 new_people_vaccinated_smoothed INT,
--- new_people_vaccinated_smoothed_per_hundred DECIMAL (3,5), wasn't working, digit before decimal is too low, < 0.
 stringency_index DECIMAL (5,3),
 population INT,
 population_density DECIMAL (5,3),
@@ -76,17 +74,12 @@ male_smokers DECIMAL (3,3),
 handwashing_facilities DECIMAL (4,4),
 hospital_beds_per_thousand DECIMAL (3,3),
 life_expectancy DECIMAL (3,3),
--- human_development_index DECIMAL (2,3), wasn't working, digit before decimal is too low, < 0.
 excess_mortality_cumulative_absolute DECIMAL (6,3)
--- excess_mortality_cumulative DECIMAL (2,3), -- wasn't working, digit before decimal is too low, < 0.
--- excess_mortality DECIMAL (2,3), -- wasn't working, digit before decimal is too low, < 0.
--- excess_mortality_cumulative_per_million DECIMAL (6,9) -- wasn't working, digit before decimal is too low, < 0.
 );
 
 
 
-
--- Found work around for importing csv file, took a while. Solution to the "invalid UTF8 character string when importing CSV table. 
+ 
 
 TRUNCATE portfolioproject.covid_deaths;
 SET FOREIGN_KEY_CHECKS = 0; 
