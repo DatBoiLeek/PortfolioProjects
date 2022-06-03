@@ -13,10 +13,10 @@ ORDER BY 1,2;
 -- Likelihood of dying if contracted with Covid in a given country.
 SELECT Location, date, total_cases, total_deaths, (total_deaths/total_cases) * 100 AS DeathPercentage
 FROM covid_deaths
-WHERE Location LIKE '%states%' -- includes virgin islands.
+WHERE Location LIKE '%states%'
 ORDER BY 1,2;
 
--- Returns 851 results without using the 'LIKE' keyword, doesn't include virgin islands.
+
 SELECT Location, date, total_cases, total_deaths, (total_deaths/total_cases) * 100 AS DeathPercentage
 FROM covid_deaths
 WHERE Location = 'United States'
@@ -50,7 +50,7 @@ WHERE continent = '' -- if continent has an empty/null value.
 GROUP BY location
 ORDER BY Total_Death_Count DESC;
 
--- Highest death rates by continent (includes other factors such as lower, middle, and upper income columns).
+-- Highest death rates by continent
 SELECT continent, MAX(total_deaths) AS Total_Death_Count
 FROM covid_deaths
 WHERE continent IS NOT NULL
@@ -114,7 +114,7 @@ RollingPeopleVaccinated INT
 );
 
 ALTER TABLE PercentPopulationVaccinated
-MODIFY RollingPeopleVaccinated BIGINT; -- allows us to store values beyond what INT can store.
+MODIFY RollingPeopleVaccinated BIGINT;
 
 -- insert total popluation vs vaccinations data, and add calculations to RollingPeopleVaccinated column.
 INSERT INTO PercentPopulationVaccinated
@@ -128,7 +128,7 @@ WHERE cd.continent IS NOT NULL;
 SELECT *, (RollingPeopleVaccinated/population) * 100
 FROM PercentPopulationVaccinated;
 
--- Creating view for visual data in Tableau using the previously made temp table.
+-- View of above table.
 DROP VIEW IF EXISTS PercentPopulationVaccinatedView;
 CREATE VIEW PercentPopulationVaccinatedView AS
 SELECT cd.continent, cd.location, cd.date, cd.population, cv.new_vaccinations, 
