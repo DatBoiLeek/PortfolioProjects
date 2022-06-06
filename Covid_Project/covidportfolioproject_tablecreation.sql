@@ -3,6 +3,7 @@ CREATE SCHEMA portfolioproject;
 USE portfolioproject;
 SET SESSION sql_mode = '';
 
+#Creation of both tables. 
 DROP TABLE IF EXISTS covid_deaths;
 CREATE TABLE covid_deaths(
 iso_code VARCHAR (500),
@@ -77,10 +78,7 @@ life_expectancy DECIMAL (3,3),
 excess_mortality_cumulative_absolute DECIMAL (6,3)
 );
 
-
-
- 
-
+#Importing CSV files for both tables.
 TRUNCATE portfolioproject.covid_deaths;
 SET FOREIGN_KEY_CHECKS = 0; 
 TRUNCATE portfolioproject.covid_deaths;
