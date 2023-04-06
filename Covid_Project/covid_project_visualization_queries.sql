@@ -1,7 +1,7 @@
 USE portfolioproject;
 -- Scripts to be used for Tableau visualizations.
 #1. 
-SELECT SUM(new_cases) AS total_cases, SUM(new_deaths) AS total_detahs, SUM(new_deaths)/SUM(new_cases) * 100 AS Death_Percentage
+SELECT SUM(new_cases) AS total_cases, SUM(new_deaths) AS total_deaths, SUM(new_deaths)/SUM(new_cases) * 100 AS Death_Percentage
 FROM covid_deaths
 WHERE continent IS NOT NULL
 ORDER BY 1,2;
