@@ -1,3 +1,5 @@
+#Updated July 2023
+
 DROP SCHEMA IF EXISTS portfolioproject;
 CREATE SCHEMA portfolioproject;
 USE portfolioproject;
@@ -9,29 +11,29 @@ CREATE TABLE covid_deaths(
 iso_code VARCHAR (500),
 continent VARCHAR (500),
 location VARCHAR (100),
-date DATETIME,
+date DATE,
 population INT,
 total_cases INT,
 new_cases INT,
-new_cases_smoothed DECIMAL(5,3),
+new_cases_smoothed DECIMAL(19,4),
 total_deaths INT,
 new_deaths INT,
-new_deaths_smoothed  DECIMAL(6,3),
-total_cases_per_million DECIMAL (5,3),
-new_cases_per_million DECIMAL (5,3),
-new_cases_smoothed_per_million DECIMAL (6,3),
-total_deaths_per_million DECIMAL (5,3),
-new_deaths_per_million DECIMAL (5,3),
-new_deaths_smoothed_per_million DECIMAL (5,3),
-reproduction_rate DECIMAL (2,2),
+new_deaths_smoothed  DECIMAL(19,4),
+total_cases_per_million DECIMAL (19,4),
+new_cases_per_million DECIMAL (19,4),
+new_cases_smoothed_per_million DECIMAL (19,4),
+total_deaths_per_million DECIMAL (19,4),
+new_deaths_per_million DECIMAL (19,4),
+new_deaths_smoothed_per_million DECIMAL (19,4),
+reproduction_rate DECIMAL (19,4),
 icu_patients INT,
-icu_patients_per_million DECIMAL (5,3),
+icu_patients_per_million DECIMAL (19,4),
 hosp_patients INT,
-hosp_patients_per_million DECIMAL (5,3),
+hosp_patients_per_million DECIMAL (19,4),
 weekly_icu_admissions INT,
-weekly_icu_admissions_per_million DECIMAL (5,3),
+weekly_icu_admissions_per_million DECIMAL (19,4),
 weekly_hosp_admissions INT,
-weekly_hosp_admissions_per_million DECIMAL (5,3)
+weekly_hosp_admissions_per_million DECIMAL (19,4)
 );
 
 DROP TABLE IF EXISTS covid_vaccinations;
@@ -39,14 +41,15 @@ CREATE TABLE covid_vaccinations(
 iso_code VARCHAR (500),
 continent VARCHAR (500),
 location VARCHAR (100),
-date DATETIME,
+date DATE,
 total_tests INT,
 new_tests INT,
-total_tests_per_thousand DECIMAL (5,3),
-new_tests_per_thousand DECIMAL (5,3),
+total_tests_per_thousand DECIMAL (19,4),
+new_tests_per_thousand DECIMAL (19,4),
 new_tests_smoothed INT,
-new_tests_smoothed_per_thousand DECIMAL (5,3),
-tests_per_case DECIMAL (5,3),
+new_tests_smoothed_per_thousand DECIMAL (19,4),
+-- positive_rate DECIMAL (4,5), wasn't working, digit before decimal is too low, < 0. 
+tests_per_case DECIMAL (19,4),
 tests_units VARCHAR (100),
 total_vaccinations INT,
 people_vaccinated INT,
@@ -54,36 +57,45 @@ people_fully_vaccinated INT,
 total_boosters INT,
 new_vaccinations INT,
 new_vaccinations_smoothed INT,
-total_vaccinations_per_hundred DECIMAL (5,3),
-people_vaccinated_per_hundred DECIMAL (5,3),
-people_fully_vaccinated_per_hundred DECIMAL (5,3),
-total_boosters_per_hundred DECIMAL (5,3),
+total_vaccinations_per_hundred DECIMAL (19,4),
+people_vaccinated_per_hundred DECIMAL (19,4),
+people_fully_vaccinated_per_hundred DECIMAL (19,4),
+total_boosters_per_hundred DECIMAL (19,4),
 new_vaccinations_smoothed_per_million INT,
 new_people_vaccinated_smoothed INT,
-stringency_index DECIMAL (5,3),
+-- new_people_vaccinated_smoothed_per_hundred DECIMAL (3,5), wasn't working, digit before decimal is too low, < 0.
+stringency_index DECIMAL (19,4),
 population INT,
-population_density DECIMAL (5,3),
-median_age DECIMAL (5,3),
-aged_65_older DECIMAL (5,3),
-aged_70_older DECIMAL (5,3),
-gdp_per_capita DECIMAL (6,3),
-extreme_poverty DECIMAL (3,3),
-cardiovasc_death_rate DECIMAL (5,3),
-diabetes_prevalence DECIMAL (3,3),
-female_smokers DECIMAL (3,3),
-male_smokers DECIMAL (3,3),
-handwashing_facilities DECIMAL (4,4),
-hospital_beds_per_thousand DECIMAL (3,3),
-life_expectancy DECIMAL (3,3),
-excess_mortality_cumulative_absolute DECIMAL (6,3)
+population_density DECIMAL (19,4),
+median_age DECIMAL (19,4),
+aged_65_older DECIMAL (19,4),
+aged_70_older DECIMAL (19,4),
+gdp_per_capita DECIMAL (19,4),
+extreme_poverty DECIMAL (19,4),
+cardiovasc_death_rate DECIMAL (19,4),
+diabetes_prevalence DECIMAL (19,4),
+female_smokers DECIMAL (19,4),
+male_smokers DECIMAL (19,4),
+handwashing_facilities DECIMAL (19,4),
+hospital_beds_per_thousand DECIMAL (19,4),
+life_expectancy DECIMAL (19,4),
+-- human_development_index DECIMAL (2,3), wasn't working, digit before decimal is too low, < 0.
+excess_mortality_cumulative_absolute DECIMAL (19,4)
+-- excess_mortality_cumulative DECIMAL (2,3), -- wasn't working, digit before decimal is too low, < 0.
+-- excess_mortality DECIMAL (2,3), -- wasn't working, digit before decimal is too low, < 0.
+-- excess_mortality_cumulative_per_million DECIMAL (6,9) -- wasn't working, digit before decimal is too low, < 0.
 );
 
+
+
+
+-- Found work around for importing csv file, took a while. Solution to the "invalid UTF8 character string when importing CSV table. 
 #Importing CSV files for both tables.
 TRUNCATE portfolioproject.covid_deaths;
 SET FOREIGN_KEY_CHECKS = 0; 
 TRUNCATE portfolioproject.covid_deaths;
 SET FOREIGN_KEY_CHECKS = 1; 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/covid_deaths.csv'
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/covid_deaths_updated.csv'
 INTO TABLE portfolioproject.covid_deaths
 CHARACTER SET latin1
 FIELDS TERMINATED BY ',' 
@@ -100,7 +112,7 @@ TRUNCATE portfolioproject.covid_vaccinations;
 SET FOREIGN_KEY_CHECKS = 0; 
 TRUNCATE portfolioproject.covid_vaccinations;
 SET FOREIGN_KEY_CHECKS = 1; 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/covid_vaccinations.csv'
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/covid_vaccinations_updated.csv'
 INTO TABLE portfolioproject.covid_vaccinations
 CHARACTER SET latin1
 FIELDS TERMINATED BY ',' 
@@ -113,3 +125,6 @@ people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoo
 people_fully_vaccinated_per_hundred, total_boosters_per_hundred, new_vaccinations_smoothed_per_million, new_people_vaccinated_smoothed, 
 stringency_index, population, population_density, median_age, aged_65_older, aged_70_older, gdp_per_capita, extreme_poverty, cardiovasc_death_rate,
 diabetes_prevalence, female_smokers, male_smokers, handwashing_facilities, hospital_beds_per_thousand, life_expectancy, excess_mortality_cumulative_absolute);
+
+
+
